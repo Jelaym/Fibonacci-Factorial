@@ -2,11 +2,13 @@ package obtener_factorialyfibonacci;
 
 import java.awt.Color;
 import java.awt.Container;
+import java.awt.TextArea;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
+import javax.swing.JTextArea;
 import javax.swing.JTextField;
 
 /**
@@ -18,13 +20,14 @@ public class calcular implements ActionListener{
     private Container _Cont;
     private JTextField _Dato;
     private JButton _Factorial, _Fibonacci;
-    private JLabel _Resultado, _Instruccion;
+    private JLabel _Instruccion;
+    private JTextArea _Resultado;
             
     public calcular(){
         _Cont= new Container();
         _Windows= new JFrame("MENU");
         _Dato= new JTextField();
-        _Resultado= new JLabel();
+        _Resultado= new JTextArea();
         _Instruccion= new JLabel();
         _Factorial= new JButton();
         _Fibonacci= new JButton();
@@ -53,8 +56,10 @@ public class calcular implements ActionListener{
         _Instruccion.setVisible(true);
         _Instruccion.setText("Escribe un Numero:");
         
-        _Resultado.setBounds(250,200,250,50);
+        _Resultado.setBounds(100,250,500,100);
         _Resultado.setForeground(Color.BLACK);
+        _Resultado.setEditable(false);
+        _Resultado.setLineWrap(true);
         _Resultado.setVisible(true);
         
         //Boton
@@ -76,20 +81,36 @@ public class calcular implements ActionListener{
         _Cont.add(_Factorial);
         _Cont.add(_Resultado);
     }
-    public double proceso(char accion, int nume){  
-        double numF= 0;
-        double numI= 0;
-        double numA= 0;
+    public String proceso(char accion, int nume){  
+        int numF= 0;
+        int numI= 0;
+        int numA= 0;
+        String resultado= "";
+        
         if(accion == 'A'){
+            
             numI= 1;
+            resultado+= "0, "; 
+                    
             for(int i= 1; i <= nume; i++) 
             {
                 numF= numF + numI;
                 numA= numF - numI;
+                
+                if(i != nume){
+                    resultado+= numF + ", ";
+                }else{
+                    resultado+= numF + ".";
+                }
                 i++;
                 if(i <= nume){	
                     numF= numF + numA;
                     numI= numF - numA;
+                    if(i != nume){
+                        resultado+= numF + ", ";
+                    }else{
+                        resultado+= numF + ".";
+                    }
                 }
             }
         }else{
@@ -102,17 +123,17 @@ public class calcular implements ActionListener{
                         numI= numI*i;
                     }
                 }
-                numF= numI;
+                resultado= numI + ".";
             }
         }
-        return numF;
+        return resultado;
     }
 
     @Override
     public void actionPerformed(ActionEvent e) {
         String dato= "";
         int nume= 0;
-        double resultado= 0;
+        String resultado= "";
         if(e.getSource() == _Fibonacci){
             dato= _Dato.getText();
             dato= dato.replaceAll(" ", "");
